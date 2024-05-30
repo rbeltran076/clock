@@ -110,15 +110,16 @@ class Chronometer:
             self.timer = Timer(1, self.increment_time)
             self.timer.start()
 
+    # From UI to saves.json
     def save(self):
         data = {
             'hourly_rate': self.hourly_rate_value,
             'time': self.label.cget('text'),
             'pay': float(self.pay_label.cget('text').split('$')[1])
         }
-        
-        if os.path.exists('saves.json'):
-            with open('saves.json', 'r') as file:
+
+        if os.path.exists('data/saves.json'):
+            with open('data/saves.json', 'r') as file:
                 saves = json.load(file)
                 if self.date_value in saves:
                     if self.title_value in saves[self.date_value]:
@@ -127,11 +128,12 @@ class Chronometer:
                         saves[self.date_value][self.title_value] = [data]
                 else:
                     saves[self.date_value] = {self.title_value: [data]}
-            with open('saves.json', 'w') as file:
+            with open('data/saves.json', 'w') as file:
                 json.dump(saves, file, indent=4)
         else:
-            with open('saves.json', 'w') as file:
+            with open('data/saves.json', 'w') as file:
                 json.dump({self.date_value: {self.title_value: [data]}}, file, indent=4)
+
 
     def see_saves(self):
         self.hourly_rate_label.pack_forget()
